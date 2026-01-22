@@ -1,0 +1,7 @@
+# SDKMAN configuration file
+# This file specifies which SDK versions to use for this project
+# Run 'sdk env install' to install the required versions
+# Run 'sdk env' to switch to the versions specified here
+
+# Java 21 LTS
+java=21.0.5-tem
