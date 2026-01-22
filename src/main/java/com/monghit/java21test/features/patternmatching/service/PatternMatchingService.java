@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
+
 /**
  * Servicio que demuestra Pattern Matching for Switch en Java 21.
  *
@@ -57,32 +59,32 @@ public class PatternMatchingService {
 
         return switch (shape) {
             case Circle c when c.radius() < 5 ->
-                String.format("Small circle with radius %.2f", c.radius());
+                String.format(Locale.US, "Small circle with radius %.2f", c.radius());
 
             case Circle c when c.radius() >= 5 && c.radius() < 10 ->
-                String.format("Medium circle with radius %.2f", c.radius());
+                String.format(Locale.US, "Medium circle with radius %.2f", c.radius());
 
             case Circle c ->
-                String.format("Large circle with radius %.2f", c.radius());
+                String.format(Locale.US, "Large circle with radius %.2f", c.radius());
 
             case Rectangle r when r.isSquare() ->
-                String.format("Square with side %.2f", r.width());
+                String.format(Locale.US, "Square with side %.2f", r.width());
 
             case Rectangle r when r.width() > r.height() ->
-                String.format("Horizontal rectangle (%.2f x %.2f)", r.width(), r.height());
+                String.format(Locale.US, "Horizontal rectangle (%.2f x %.2f)", r.width(), r.height());
 
             case Rectangle r ->
-                String.format("Vertical rectangle (%.2f x %.2f)", r.width(), r.height());
+                String.format(Locale.US, "Vertical rectangle (%.2f x %.2f)", r.width(), r.height());
 
             case Triangle t when t.isEquilateral() ->
-                String.format("Equilateral triangle with side %.2f", t.side1());
+                String.format(Locale.US, "Equilateral triangle with side %.2f", t.side1());
 
             case Triangle t when t.isIsosceles() ->
-                String.format("Isosceles triangle with sides %.2f, %.2f, %.2f",
+                String.format(Locale.US, "Isosceles triangle with sides %.2f, %.2f, %.2f",
                     t.side1(), t.side2(), t.side3());
 
             case Triangle t ->
-                String.format("Scalene triangle with sides %.2f, %.2f, %.2f",
+                String.format(Locale.US, "Scalene triangle with sides %.2f, %.2f, %.2f",
                     t.side1(), t.side2(), t.side3());
         };
     }
@@ -141,8 +143,8 @@ public class PatternMatchingService {
             case Integer i when i < 0 -> String.format("negative integer: %d", i);
             case Integer i when i == 0 -> "zero";
             case Integer i -> String.format("positive integer: %d", i);
-            case Double d -> String.format("double: %.2f", d);
-            case Shape s -> String.format("Shape: %s with area %.2f", s.type(), s.area());
+            case Double d -> String.format(Locale.US, "double: %.2f", d);
+            case Shape s -> String.format(Locale.US, "Shape: %s with area %.2f", s.type(), s.area());
             default -> String.format("unknown type: %s", obj.getClass().getSimpleName());
         };
     }
@@ -160,14 +162,14 @@ public class PatternMatchingService {
 
         String comparison = switch (shape1) {
             case Circle c1 when shape2 instanceof Circle c2 ->
-                String.format("Both circles: radius %.2f vs %.2f", c1.radius(), c2.radius());
+                String.format(Locale.US, "Both circles: radius %.2f vs %.2f", c1.radius(), c2.radius());
 
             case Rectangle r1 when shape2 instanceof Rectangle r2 ->
-                String.format("Both rectangles: %.2fx%.2f vs %.2fx%.2f",
+                String.format(Locale.US, "Both rectangles: %.2fx%.2f vs %.2fx%.2f",
                     r1.width(), r1.height(), r2.width(), r2.height());
 
             case Triangle t1 when shape2 instanceof Triangle t2 ->
-                String.format("Both triangles: area %.2f vs %.2f", t1.area(), t2.area());
+                String.format(Locale.US, "Both triangles: area %.2f vs %.2f", t1.area(), t2.area());
 
             default ->
                 String.format("Different shapes: %s vs %s", shape1.type(), shape2.type());

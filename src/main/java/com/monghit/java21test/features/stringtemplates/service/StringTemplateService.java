@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
+
 /**
  * Servicio que demuestra String Templates (Preview Feature en Java 21).
  *
@@ -23,7 +25,7 @@ public class StringTemplateService {
         log.info("Generating report for: {}", data.title());
 
         // Usando String.format como alternativa a STR templates
-        return String.format("""
+        return String.format(Locale.US, """
             ==================== REPORT ====================
             Title: %s
             Author: %s

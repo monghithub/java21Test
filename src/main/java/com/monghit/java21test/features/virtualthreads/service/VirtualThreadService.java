@@ -142,28 +142,36 @@ public class VirtualThreadService {
      * Simula operación de I/O bloqueante.
      */
     public TaskResult simulateBlockingIO(long delayMs) {
-        int taskId = ThreadLocalRandom.current().nextInt(1000);
-        LocalDateTime startTime = LocalDateTime.now();
-        Thread currentThread = Thread.currentThread();
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            Future<TaskResult> future = executor.submit(() -> {
+                int taskId = ThreadLocalRandom.current().nextInt(1000);
+                LocalDateTime startTime = LocalDateTime.now();
+                Thread currentThread = Thread.currentThread();
 
-        try {
-            log.info("Simulating blocking I/O for {}ms on thread {}", delayMs, currentThread.getName());
-            Thread.sleep(delayMs);
+                try {
+                    log.info("Simulating blocking I/O for {}ms on thread {}", delayMs, currentThread.getName());
+                    Thread.sleep(delayMs);
 
-            LocalDateTime endTime = LocalDateTime.now();
-            return TaskResult.success(
-                    taskId,
-                    currentThread.getName(),
-                    currentThread.isVirtual(),
-                    startTime,
-                    endTime,
-                    String.format("Blocking I/O completed after %dms", delayMs)
-            );
+                    LocalDateTime endTime = LocalDateTime.now();
+                    return TaskResult.success(
+                            taskId,
+                            currentThread.getName(),
+                            currentThread.isVirtual(),
+                            startTime,
+                            endTime,
+                            String.format("Blocking I/O completed after %dms", delayMs)
+                    );
 
-        } catch (InterruptedException e) {
-            LocalDateTime endTime = LocalDateTime.now();
-            return TaskResult.failure(taskId, currentThread.getName(), currentThread.isVirtual(),
-                    startTime, endTime, e.getMessage());
+                } catch (InterruptedException e) {
+                    LocalDateTime endTime = LocalDateTime.now();
+                    return TaskResult.failure(taskId, currentThread.getName(), currentThread.isVirtual(),
+                            startTime, endTime, e.getMessage());
+                }
+            });
+
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error executing blocking I/O simulation", e);
         }
     }
 
